@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mini_erp_db
+    environment:
+      POSTGRES_DB: mini_erp
+      POSTGRES_USER: erp_user
+      POSTGRES_PASSWORD: erp_password_change_in_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U erp_user -d mini_erp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mini_erp_backend
+    environment:
+      DATABASE_URL: postgresql://erp_user:erp_password_change_in_prod@postgres:5432/mini_erp
+      JWT_SECRET: docker-jwt-secret-change-in-production
+      PORT: 5000
+      NODE_ENV: development
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+
+volumes:
+  postgres_data:
