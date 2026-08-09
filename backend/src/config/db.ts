@@ -149,18 +149,19 @@ const pool = useInMemoryDatabase
   ? (new InMemoryPoolAdapter() as unknown as Pool)
   : new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-    max: 20,
+    max: 10,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 10000,
+    keepAlive: true,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
   });
 
 if (!useInMemoryDatabase) {
   pool.on('error', (err: Error) => {
-    console.error('Unexpected error on idle client', err);
-    process.exit(-1);
+    console.error('Unexpected PostgreSQL pool error:', err);
   });
 }
+
 
 export async function closePool() {
   if (useInMemoryDatabase) {
