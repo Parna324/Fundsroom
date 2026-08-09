@@ -10,10 +10,10 @@ async function startServer() {
     client.release();
     console.log('✅ Database connected successfully');
 
-    app.listen(config.port, () => {
-      console.log(`🚀 Mini ERP API running on port ${config.port}`);
-      console.log(`   Environment: ${config.nodeEnv}`);
-      console.log(`   Health: http://localhost:${config.port}/health`);
+    const PORT = Number(process.env.PORT) || 5000;
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Mini ERP API running on port ${PORT}`);
     });
   } catch (err) {
     console.error('❌ Failed to start server:', err);
