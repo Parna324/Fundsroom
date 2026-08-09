@@ -15,6 +15,10 @@ import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
+// ── Security middleware ──────────────────────────────────────
+
 // ── Security middleware ──────────────────────────────────────
 app.use(helmet());
 app.use(cors({
@@ -47,12 +51,12 @@ app.get('/health', (_req, res) => {
 });
 
 // ── API Routes ───────────────────────────────────────────────
-app.use('/api/auth',      authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/customers', customerRoutes);
-app.use('/api/products',  productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/challans',  challanRoutes);
+app.use('/api/challans', challanRoutes);
 
 // ── 404 & Error handlers ─────────────────────────────────────
 app.use(notFoundHandler);

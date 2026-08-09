@@ -32,8 +32,8 @@ export default function ChallanFormPage() {
 
   useEffect(() => {
     Promise.all([
-      customerService.list({ limit: 100, status: 'ACTIVE' }),
-      productService.list({ page: 1, limit: 200 }),
+      customerService.list({ page: 1, limit: 100, status: 'ACTIVE' }),
+      productService.list({ page: 1, limit: 100 }),
     ]).then(([cRes, pRes]) => {
       setCustomers(cRes.data.data);
       setProducts(pRes.data.data);
