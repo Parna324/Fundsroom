@@ -33,7 +33,7 @@ export default function ChallanFormPage() {
   useEffect(() => {
     Promise.all([
       customerService.list({ limit: 100, status: 'ACTIVE' }),
-      productService.list({ limit: 200 }),
+      productService.list({ page: 1, limit: 200 }),
     ]).then(([cRes, pRes]) => {
       setCustomers(cRes.data.data);
       setProducts(pRes.data.data);
@@ -78,7 +78,7 @@ export default function ChallanFormPage() {
   const filteredProducts = products.filter(p =>
     productSearch &&
     (p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-     p.sku.toLowerCase().includes(productSearch.toLowerCase()))
+      p.sku.toLowerCase().includes(productSearch.toLowerCase()))
   );
 
   const handleSave = async (asDraft: boolean) => {
