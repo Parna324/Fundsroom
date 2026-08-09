@@ -9,8 +9,8 @@
     "start": "node dist/server.js",
     "test": "jest --forceExit --detectOpenHandles",
     "test:coverage": "jest --coverage --forceExit --detectOpenHandles",
-    "seed": "tsx database/seed/seed.ts",
-    "migrate": "psql $DATABASE_URL -f database/migrations/001_schema.sql",
+    "seed": "tsx scripts/seed-users.ts",
+    "migrate": "tsx scripts/migrate.ts",
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
